@@ -4,7 +4,10 @@ import {isWebglRenderSupport, now} from "../utils";
 export default class DecoderWorker {
     constructor(player) {
         this.player = player;
-        this.decoderWorker = new Worker(player._opt.decoder)
+        // this.decoderWorker = new Worker(player._opt.decoder)
+        const blob = new Blob([`importScripts("${player._opt.decoder}")`], {"type": 'application/javascript'});
+        const blobUrl = window.URL.createObjectURL(blob);
+        this.decoderWorker = new Worker(blobUrl);
         this._initDecoderWorker();
         player.debug.log('decoderWorker', 'init')
     }
